@@ -15,7 +15,7 @@ var tot_tam=0;
 		this.url="https://query.wikidata.org/sparql?format=json&query=";
 	console.log(this.url+encodeURIComponent($("#wdsparql").text()));
 		$.getJSON(this.url+encodeURIComponent($("#wdsparql").text()),function(data){
-			jsonData=data;
+			this.jsonData=data;
 			//console.log(JSON.stringify(data));
 			//return data;
 			}
@@ -54,7 +54,7 @@ var tot_tam=0;
 				if(typeof($(this).find('tag[k="name"]').attr("v"))=="string"){//name exists
 					var en_name=$(this).find('tag[k="name"]').attr('v')
 					//console.log(en_name);
-					$dest_lang=jsonData.results;
+					$dest_lang=this.jsonData.results;
 					index =$dest_lang.bindings.findIndex(function(item, i){
 					//nsole.log(Object.keys(item));
 						if(!(item==="undefined")){
