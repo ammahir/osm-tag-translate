@@ -23,7 +23,7 @@ var tot_tam=0;
 		
 	}
 	getOsmSource=function(){
-		url="http://overpass-api.de/api/interpreter?data=";
+		url="https://overpass-api.de/api/interpreter?data=";
 		console.log(url+encodeURIComponent($('#overpassQuery').text()));
 		$.ajax({
 			type: "GET" ,
