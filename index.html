@@ -3,104 +3,15 @@
 <meta charset="utf-8">
 	<title>OSM Tag Translation</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script type='text/javascript' src='scripts/osmTagTranslate.js'></script>
 <script type="text/javascript">
-osmTagTranslate={
+<!-- osmTagTranslate={ -->
 
-};
-var jsonData;
-var osmSource;
-var tot_tam=0;
-	osmTagTranslate.loadWikidata=function(){
+<!-- }; -->
+<!-- var jsonData; -->
+<!-- var osmSource; -->
+<!-- var tot_tam=0; -->
 	
-		this.url="https://query.wikidata.org/sparql?format=json&query=";
-	console.log(this.url+encodeURIComponent($("#wdsparql").text()));
-		$.getJSON(this.url+encodeURIComponent($("#wdsparql").text()),function(data){
-			this.jsonData=data;
-			//console.log(JSON.stringify(data));
-			//return data;
-			}
-		);
-		
-	}
-	getOsmSource=function(){
-		url="https://overpass-api.de/api/interpreter?data=";
-		console.log(url+encodeURIComponent($('#overpassQuery').text()));
-		$.ajax({
-			type: "GET" ,
-			url: url+encodeURIComponent($('#overpassQuery').text()),
-			dataType: "xml" ,
-			success: function(xml) {
-				osmSource=xml;
-				$('#osmSourcetxt').text(getXmlAsString(osmSource));
-				//getTranslateAll();
-				//console.log(getXmlAsString(osmSource));
-			}
-		});		
-	}
-	
-	getTranslateAll=function(){
-		//console.log(osmSource);
-		//var xmlDoc=$.parseXML(osmSource);
-		osmSource=$.parseXML($('#osmSourcetxt').val());
-		var $xml =$(osmSource);//$(osmSource);
-		var n_w_r = ["node","relation","way"];
-		$.each(n_w_r,function(i,j){
-		var $node = $xml.find(j);
-		$node.each(function(){
-		
-			$thisnode=$(this);
-			//console.log(typeof($(this).find('tag[k="name"]').attr("v")));
-			if(typeof($(this).find('tag[k="name:ta"]').attr("v"))==="undefined"){	
-				if(typeof($(this).find('tag[k="name"]').attr("v"))=="string"){//name exists
-					var en_name=$(this).find('tag[k="name"]').attr('v')
-					//console.log(en_name);
-					$dest_lang=this.jsonData.results;
-					index =$dest_lang.bindings.findIndex(function(item, i){
-					//nsole.log(Object.keys(item));
-						if(!(item==="undefined")){
-						return item["source_lang"].value === en_name
-						}
-					});
-					
-					if(index >-1){
-				
-					tot_tam++;
-						$thisnode.append("<tag k='name:ta' v='"+$dest_lang.bindings[index].dest_lang.value+"' />");
-						$thisnode.attr("action","modify");
-					}
-
-					
-				}
-			}
-			});
-			
-			});
-	
-		console.log(tot_tam);
-		
-		$('#osmTagTranslated').val(getXmlAsString(osmSource));
-	}//getTranslateAll
-	
-	function getXmlAsString(xmlDom){
-		return (typeof XMLSerializer!=="undefined") ? 
-		   (new window.XMLSerializer()).serializeToString(xmlDom) : 
-		   xmlDom.xml;
-	}
-		 
-	getTranslatedText=function(val){
-	 // en_name="Ahmedabad";
-	  let index=jsonData.results.bindings.findIndex(function(item,i)	{
-		return item["source_lang"].value === val;
-	  });
-	  //console.log(index);
-	  if(index>-1)
-	  return jsonData.results.bindings[index].dest_lang.value;
-	  else
-	  return "";
-	  //$('#abc').html(x.results.bindings[index].itemLabel_ta.value);
-
-	}
-
 
 function xmlLoad(enta){
    $.ajax({
@@ -143,6 +54,7 @@ function xmlLoad(enta){
 		}
 	});
 }
+
  function getXmlAsString(xmlDom){
 	  return (typeof XMLSerializer!=="undefined") ? 
 		   (new window.XMLSerializer()).serializeToString(xmlDom) : 
@@ -153,12 +65,12 @@ $(document).ready(function(){
 	tot_tam=0;
 	//xmlLoad(enta);
 	osmTagTranslate.loadWikidata();
-	getOsmSource();
+	osmTagTranslate.getOsmSource();
 	//getTranslateAll();
 	
 	console.log("tot="+tot_tam);
 	$('#translate').on('click',function(){
-		getTranslateAll();
+		osmTagTranslate.getTranslateAll();
 	});
 });
 
