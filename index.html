@@ -112,8 +112,8 @@ filter (?item != concat('wd:',?itemLabel_ta)).
 [out:xml][timeout:2000];
 // fetch area “Tamil Nadu” to search in
 //{{geocodeArea:Tamil Nadu}}->.searchArea;
-area(3600096905)->.searchArea;
-
+//area(3600096905)->.searchArea;
+area[name="Tamil Nadu"]->.searchArea;
 //area(3601766358)->.searchArea;//chennai
 // gather results
 (
